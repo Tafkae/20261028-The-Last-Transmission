@@ -11,8 +11,19 @@ export function reconstructArchiveFromLines(lines) {
 
   for (let line of lines) {
     let splitLine = line.split("|");
-    fragments.push(splitLine.at(-1));
+    let fragment = splitLine.at(-1);
+    let index = parseInt(splitLine.at(2));
+
+    let oldLength = fragments.length
+    if ( fragments.length < index ) {
+        fragments.length = index;
+    }
+    for( let i = oldLength; i < index; i++) {
+        fragments[i] = `[MISSING ${String(i + 1).padStart(3,"0")}]`
+    }
+    fragments[index - 1] = fragment
   }
 
+  // console.log(fragments);
   return fragments.join(" ");
 }
